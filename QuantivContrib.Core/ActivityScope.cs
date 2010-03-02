@@ -1,15 +1,11 @@
 using System;
-using System.Linq;
-using Castle.DynamicProxy;
 using Quantiv.Runtime;
-using QuantivContrib.Core.Attributes;
+using QuantivContrib.Core.Commands;
 
 namespace QuantivContrib.Core
 {
     public class ActivityScope: IDisposable
     {
-        private readonly ProxyGenerator _generator;
-
         private ActivityController _activityController;
         private Activity _activity;
 
@@ -20,7 +16,6 @@ namespace QuantivContrib.Core
 
         public ActivityScope(string controllerPool, string activityRef)
         {
-            _generator =  new ProxyGenerator();
             _controllerPool = controllerPool;
             _activityRef = activityRef;
             CreateActivity();
@@ -32,52 +27,22 @@ namespace QuantivContrib.Core
 
         public T Create<T>() where T : DomainEntityBase, new()
         {
-            var quantivEntity = _activity.GetEntityManager(ExtractEntityNameFromType(typeof(T))).CreateEntity();
-
-            var domainEntity = _generator.CreateClassProxy<T>(new EntityProxy());
-            domainEntity.QuantivEntity =  quantivEntity;
-
-            return domainEntity;
+            return new Create<T>().Execute(_activity);
         }
 
         public T Retrieve<T>(int id) where T : DomainEntityBase, new()
         {
-            string idColumn = string.Format("{0}Id", ExtractEntityNameFromType(typeof(T)));
-
-            var identifyingProperty = typeof(T).GetProperties()
-                .Where(p => p.GetCustomAttributes(typeof(IdAttribute), true).ToList().Count > 0)
-                .FirstOrDefault();
-
-            if(identifyingProperty != null)
-            {
-                idColumn = identifyingProperty.Name;
-            }
-
-            var quantivEntity = _activity.GetEntityManager(ExtractEntityNameFromType(typeof(T)))
-                .CreateEntityRetriever()
-                .Retrieve(idColumn, id);
-
-            var domainEntity = _generator.CreateClassProxy<T>(new EntityProxy());
-            domainEntity.QuantivEntity = quantivEntity;
-
-            return domainEntity;
+            return new Retrieve<T>(id).Execute(_activity);
         }
 
         public T Retrieve<T>(string propertyName, object value) where T : DomainEntityBase, new()
         {
-            var quantivEntity = _activity.GetEntityManager(ExtractEntityNameFromType(typeof(T)))
-                .CreateEntityRetriever()
-                .Retrieve(propertyName, value);
-
-            var domainEntity = _generator.CreateClassProxy<T>(new EntityProxy());
-            domainEntity.QuantivEntity = quantivEntity;
-
-            return domainEntity;
+            return new Retrieve<T>(propertyName, value).Execute(_activity);
         }
 
         public void SaveNewEntity(DomainEntityBase unsavedEntity)
         {
-            unsavedEntity.QuantivEntity.Save(_activity);
+            new SaveNewEntity(unsavedEntity).Execute(_activity);
         }
 
         public void Flush()
@@ -98,12 +63,6 @@ namespace QuantivContrib.Core
         {
             _activityController = ActivityControllerPooler.AllocateController(_controllerPool);
             _activity = _activityController.StartActivity(_activityRef);
-        }
-
-        private static string ExtractEntityNameFromType(Type type)
-        {
-            var classRefAttribute = type.GetCustomAttributes(typeof(EntityAttribute), false).FirstOrDefault();
-            return classRefAttribute != null ? ((EntityAttribute) classRefAttribute).ClassRef : type.Name;
         }
 
         public void Dispose()
