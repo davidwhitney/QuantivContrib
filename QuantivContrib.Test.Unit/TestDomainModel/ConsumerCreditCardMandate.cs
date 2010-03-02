@@ -3,28 +3,28 @@ using QuantivContrib.Core.Attributes;
 
 namespace QuantivContrib.Test.Unit.TestDomainModel
 {
-    [EntityClassRef("ConsumerCreditCardMandate")]
+    [EntityClass("ConsumerCreditCardMandate")]
     public class ConsumerCreditCardMandate : DomainEntityBase
     {
-        [Id, AttributeRef]
+        [Id, Attribute]
         public virtual int ConsumerCreditCardMandateId { get; set; }
 
-        [AttributeRef]
+        [Attribute]
         public virtual int FundraiserRevenueStreamId { get; set; }
 
-        [AttributeRef]
+        [Attribute]
         public virtual decimal Amount { get; set; }
 
         // Deliberately unmapped.
         public virtual int ConsumerCreditCardId { get; set; }
 
-        [AttributeRef]
+        [Attribute]
         public virtual int DonationOriginId { get; set; }
 
-        [AttributeRef]
+        [Attribute]
         public virtual int DonationSourceId { get; set; }
 
-        [AttributeRef("IsUKTaxPayer")]
+        [Attribute("IsUKTaxPayer")]
         public virtual bool IsUkTaxPayer { get; set; }
     }
 }

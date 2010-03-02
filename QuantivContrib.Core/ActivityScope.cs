@@ -102,8 +102,8 @@ namespace QuantivContrib.Core
 
         private static string ExtractEntityNameFromType(Type type)
         {
-            var classRefAttribute = type.GetCustomAttributes(typeof(EntityClassRefAttribute), false).FirstOrDefault();
-            return classRefAttribute != null ? ((EntityClassRefAttribute) classRefAttribute).ClassRef : type.Name;
+            var classRefAttribute = type.GetCustomAttributes(typeof(EntityClassAttribute), false).FirstOrDefault();
+            return classRefAttribute != null ? ((EntityClassAttribute) classRefAttribute).ClassRef : type.Name;
         }
 
         public void Dispose()
