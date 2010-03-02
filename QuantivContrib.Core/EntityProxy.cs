@@ -18,22 +18,29 @@ namespace QuantivContrib.Core
 
         public void Intercept(IInvocation invocation)
         {
-            if (invocation.InvocationTarget is DomainEntityBase)
+            if (!IsAProperty(invocation.Method)
+                || !(invocation.InvocationTarget is DomainEntityBase)
+                || !PropertyHasAttributeRefAttribute(invocation.Method))
             {
-                var parentObject = (DomainEntityBase)invocation.InvocationTarget;
-
-                if (invocation.Method.Name.StartsWith("get_"))
-                {
-                    invocation.ReturnValue = GetAttributeValueFromReflectedProperty(invocation.Method, parentObject);
-                }
-                else if (invocation.Method.Name.StartsWith("get_"))
-                {
-                    SetAttributeValueFromReflectedProperty(invocation.Method, invocation.Arguments[0], parentObject);
-                }
+                invocation.Proceed();
+                return;
             }
 
-            invocation.Proceed();
+            var parentObject = (DomainEntityBase)invocation.InvocationTarget;
 
+            if (invocation.Method.Name.StartsWith("get_"))
+            {
+                invocation.ReturnValue = GetAttributeValueFromReflectedProperty(invocation.Method, parentObject);
+            }
+            else if (invocation.Method.Name.StartsWith("set_"))
+            {
+                SetAttributeValueFromReflectedProperty(invocation.Method, invocation.Arguments[0], parentObject);
+            }
+        }
+
+        private static bool IsAProperty(MethodBase invocation)
+        {
+            return invocation.Name.StartsWith("get_") || invocation.Name.StartsWith("set_");
         }
 
         protected object GetAttributeValueFromReflectedProperty(MethodBase reflectedMethodMetadata, DomainEntityBase invocationTarget)
@@ -98,6 +105,18 @@ namespace QuantivContrib.Core
             }
 
             return string.Empty;
+        }
+
+        protected bool PropertyHasAttributeRefAttribute(MethodBase property)
+        {
+            var propertyName = ExtractPropertyNameFromMethodBase(property);
+
+            var databaseColumnNameAttributes = property.DeclaringType
+                .GetProperty(propertyName)
+                .GetCustomAttributes(typeof(AttributeRefAttribute), true)
+                .ToList();
+
+            return databaseColumnNameAttributes.Count > 0;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace QuantivContrib.Test.Unit.TestDomainModel
         [AttributeRef]
         public virtual decimal Amount { get; set; }
 
-        [AttributeRef]
+        // Deliberately unmapped.
         public virtual int ConsumerCreditCardId { get; set; }
 
         [AttributeRef]
