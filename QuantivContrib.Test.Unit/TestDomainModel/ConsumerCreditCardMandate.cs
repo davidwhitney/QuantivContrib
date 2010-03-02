@@ -1,8 +1,7 @@
-using System;
-using System.Reflection;
-using Quantiv5UsageExamples.QuantivContrib;
+using QuantivContrib.Core;
+using QuantivContrib.Core.Attributes;
 
-namespace Quantiv5UsageExamples.DomainModel
+namespace QuantivContrib.Test.Unit.TestDomainModel
 {
     [EntityClassRef("ConsumerCreditCardMandate")]
     public class ConsumerCreditCardMandate : DomainEntityBase

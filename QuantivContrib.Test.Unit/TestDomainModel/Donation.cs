@@ -1,6 +1,6 @@
-using Quantiv5UsageExamples.QuantivContrib;
+using QuantivContrib.Core;
 
-namespace Quantiv5UsageExamples.DomainModel
+namespace QuantivContrib.Test.Unit.TestDomainModel
 {
     public class Donation : DomainEntityBase
     {

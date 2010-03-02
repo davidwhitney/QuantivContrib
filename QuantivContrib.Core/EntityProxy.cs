@@ -18,19 +18,34 @@ namespace QuantivContrib.Core
 
         public void Intercept(IInvocation invocation)
         {
+            if (invocation.InvocationTarget is DomainEntityBase)
+            {
+                var parentObject = (DomainEntityBase)invocation.InvocationTarget;
+
+                if (invocation.Method.Name.StartsWith("get_"))
+                {
+                    invocation.ReturnValue = GetAttributeValueFromReflectedProperty(invocation.Method, parentObject);
+                }
+                else if (invocation.Method.Name.StartsWith("get_"))
+                {
+                    SetAttributeValueFromReflectedProperty(invocation.Method, invocation.Arguments[0], parentObject);
+                }
+            }
+
             invocation.Proceed();
+
         }
 
-        protected T GetAttributeValueFromReflectedProperty<T>(MethodBase reflectedMethodMetadata)
+        protected object GetAttributeValueFromReflectedProperty(MethodBase reflectedMethodMetadata, DomainEntityBase invocationTarget)
         {
             string columnName = GetDatabaseColumnNameForProperty(reflectedMethodMetadata);
-            return (T)QuantivEntity.GetAttributeValue(columnName);
+            return invocationTarget.QuantivEntity.GetAttributeValue(columnName);
         }
 
-        protected void SetAttributeValueFromReflectedProperty<T>(MethodBase reflectedMethodMetadata, T value)
+        protected void SetAttributeValueFromReflectedProperty<T>(MethodBase reflectedMethodMetadata, T value, DomainEntityBase invocationTarget)
         {
             string columnName = GetDatabaseColumnNameForProperty(reflectedMethodMetadata);
-            QuantivEntity.SetAttributeValue(columnName, value);
+            invocationTarget.QuantivEntity.SetAttributeValue(columnName, value);
         }
 
         private string GetDatabaseColumnNameForProperty(MethodBase reflectedMethodMetadata)

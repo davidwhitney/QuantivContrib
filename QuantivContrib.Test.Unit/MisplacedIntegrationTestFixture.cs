@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuantivContrib.Core;
+using QuantivContrib.Test.Unit.TestDomainModel;
 
 namespace QuantivContrib.Test.Unit
 {
@@ -10,7 +11,7 @@ namespace QuantivContrib.Test.Unit
     {
         private const string ControllerPoolName = "BB01_Donation";
 
-        public void Main()
+        public void FullEndToEndExample()
         {
             using (var session = new EntityActivityScope(ControllerPoolName))
             {
