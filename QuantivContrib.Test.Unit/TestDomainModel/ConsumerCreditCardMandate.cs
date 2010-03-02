@@ -3,7 +3,7 @@ using QuantivContrib.Core.Attributes;
 
 namespace QuantivContrib.Test.Unit.TestDomainModel
 {
-    [EntityClass("ConsumerCreditCardMandate")]
+    [Entity("ConsumerCreditCardMandate")]
     public class ConsumerCreditCardMandate : DomainEntityBase
     {
         [Id, Attribute]
