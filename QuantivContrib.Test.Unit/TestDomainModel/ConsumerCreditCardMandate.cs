@@ -3,7 +3,7 @@ using QuantivContrib.Core.Attributes;
 
 namespace QuantivContrib.Test.Unit.TestDomainModel
 {
-    [Entity("ConsumerCreditCardMandate")]
+    [Entity]
     public class ConsumerCreditCardMandate : DomainEntityBase
     {
         [Id, Attribute]
@@ -15,7 +15,7 @@ namespace QuantivContrib.Test.Unit.TestDomainModel
         [Attribute]
         public virtual decimal Amount { get; set; }
 
-        // Deliberately unmapped.
+        [Attribute]
         public virtual int ConsumerCreditCardId { get; set; }
 
         [Attribute]

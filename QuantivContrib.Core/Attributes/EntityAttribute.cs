@@ -7,6 +7,10 @@ namespace QuantivContrib.Core.Attributes
     {
         public string ClassRef { get; set; }
 
+        public EntityAttribute()
+        {
+        }
+
         public EntityAttribute(string classRef)
         {
             ClassRef = classRef;

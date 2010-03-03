@@ -101,7 +101,7 @@ namespace QuantivContrib.Core
 
             if (databaseColumnNameAttributes.Count > 0)
             {
-                return ((AttributeAttribute)databaseColumnNameAttributes[0]).ColumnName;
+                return ((AttributeAttribute)databaseColumnNameAttributes[0]).AttributeRef;
             }
 
             return string.Empty;

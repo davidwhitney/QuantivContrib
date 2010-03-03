@@ -5,15 +5,15 @@ namespace QuantivContrib.Core.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class AttributeAttribute: Attribute
     {
-        public string ColumnName { get; set; }
+        public string AttributeRef { get; set; }
 
         public AttributeAttribute()
         {
         }
 
-        public AttributeAttribute(string columnName)
+        public AttributeAttribute(string attributeRef)
         {
-            ColumnName = columnName;
+            AttributeRef = attributeRef;
         }
     }
 }

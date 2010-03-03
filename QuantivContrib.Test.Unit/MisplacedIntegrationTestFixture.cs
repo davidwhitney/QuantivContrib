@@ -14,7 +14,7 @@ namespace QuantivContrib.Test.Unit
             {
                 var mandate = session.Create<ConsumerCreditCardMandate>();
 
-                mandate.Amount = 1;
+                mandate.Amount = 50;
 
                 var amount = mandate.Amount;
 
