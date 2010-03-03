@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Quantiv.Runtime;
 using QuantivContrib.Core.Attributes;
 
@@ -8,6 +9,7 @@ namespace QuantivContrib.Core.Commands
     {
         public string FetchByPropertyName { get; private set; }
         public object FetchValue { get; private set; }
+        public object RetrievalPlan { get; set; }
 
         private readonly bool _fetchById;
 
@@ -30,9 +32,11 @@ namespace QuantivContrib.Core.Commands
                 FetchByPropertyName = DetermineIdFieldName();
             }
 
+            Debug.WriteLine(string.Format("Retriving by: {0} and {1}", FetchByPropertyName, FetchValue));
+
             var quantivEntity = activity.GetEntityManager(ExtractEntityNameFromType(typeof(TTypeOfObjectToRetrieve)))
-                .CreateEntityRetriever()
-                .Retrieve(FetchByPropertyName, FetchValue);
+                                        .CreateEntityRetriever()
+                                        .Retrieve(FetchByPropertyName, FetchValue);
 
             var domainEntity = ProxyGenerator.CreateClassProxy<TTypeOfObjectToRetrieve>(new EntityProxy());
             domainEntity.QuantivEntity = quantivEntity;

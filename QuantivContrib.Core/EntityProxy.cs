@@ -53,6 +53,7 @@ namespace QuantivContrib.Core
         {
             string columnName = GetDatabaseColumnNameForProperty(reflectedMethodMetadata);
             invocationTarget.QuantivEntity.SetAttributeValue(columnName, value);
+            invocationTarget.Dirty = true;
         }
 
         private string GetDatabaseColumnNameForProperty(MethodBase reflectedMethodMetadata)
@@ -96,12 +97,12 @@ namespace QuantivContrib.Core
         {
             var databaseColumnNameAttributes = reflectedMethodMetadata.DeclaringType
                 .GetProperty(propertyName)
-                .GetCustomAttributes(typeof(AttributeAttribute), true)
+                .GetCustomAttributes(typeof(AttributeRefAttribute), true)
                 .ToList();
 
             if (databaseColumnNameAttributes.Count > 0)
             {
-                return ((AttributeAttribute)databaseColumnNameAttributes[0]).AttributeRef;
+                return ((AttributeRefAttribute)databaseColumnNameAttributes[0]).AttributeRef;
             }
 
             return string.Empty;
@@ -113,7 +114,7 @@ namespace QuantivContrib.Core
 
             var databaseColumnNameAttributes = property.DeclaringType
                 .GetProperty(propertyName)
-                .GetCustomAttributes(typeof(AttributeAttribute), true)
+                .GetCustomAttributes(typeof(AttributeRefAttribute), true)
                 .ToList();
 
             return databaseColumnNameAttributes.Count > 0;

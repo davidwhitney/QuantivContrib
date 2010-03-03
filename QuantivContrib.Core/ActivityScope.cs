@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Quantiv.Runtime;
 using QuantivContrib.Core.Commands;
 
@@ -6,6 +7,9 @@ namespace QuantivContrib.Core
 {
     public class ActivityScope: IDisposable
     {
+        public bool ReadOnly { get; set; }
+        public bool AutoSave { get; set; }
+
         private ActivityController _activityController;
         private Activity _activity;
 
@@ -13,11 +17,16 @@ namespace QuantivContrib.Core
         private readonly string _activityRef;
 
         private bool _disposed;
+        private readonly System.Collections.Generic.List<DomainEntityBase> _attachedEntities;
 
         public ActivityScope(string controllerPool, string activityRef)
         {
+            AutoSave = true;
+            _attachedEntities = new System.Collections.Generic.List<DomainEntityBase>();
+            
             _controllerPool = controllerPool;
             _activityRef = activityRef;
+
             CreateActivity();
         }
         ~ActivityScope()
@@ -27,22 +36,67 @@ namespace QuantivContrib.Core
 
         public T Create<T>() where T : DomainEntityBase, new()
         {
-            return new Create<T>().Execute(_activity);
+            var entity = new Create<T>().Execute(_activity);
+            _attachedEntities.Add(entity);
+            return entity;
         }
 
         public T Retrieve<T>(int id) where T : DomainEntityBase, new()
         {
-            return new Retrieve<T>(id).Execute(_activity);
+            var entity = new Retrieve<T>(id).Execute(_activity);
+            _attachedEntities.Add(entity);
+            return entity;
         }
 
         public T Retrieve<T>(string propertyName, object value) where T : DomainEntityBase, new()
         {
-            return new Retrieve<T>(propertyName, value).Execute(_activity);
+            var entity = new Retrieve<T>(propertyName, value).Execute(_activity);
+            _attachedEntities.Add(entity);
+            return entity;
         }
 
-        public void SaveNewEntity(DomainEntityBase unsavedEntity)
+        public SearchConditionList BuildSearchConditionsForEntity<T>() where T : DomainEntityBase, new()
         {
-            new SaveNewEntity(unsavedEntity).Execute(_activity);
+            return new CreateSearchConditions<T>().Execute(_activity);
+        }
+
+        public System.Collections.Generic.List<T> List<T>() where T : DomainEntityBase, new()
+        {
+            return new List<T>().Execute(_activity);
+        }
+
+        public System.Collections.Generic.List<T> List<T>(string comment) where T : DomainEntityBase, new()
+        {
+            return List<T>(new ListPreferences {Comment = comment});
+        }
+
+        public System.Collections.Generic.List<T> List<T>(ListPreferences preferences) where T : DomainEntityBase, new()
+        {
+            var listCommand = new List<T>
+                              {
+                                  SearchConditions = preferences.SearchConditionList,
+                                  RetrievalPlan = preferences.RetrievalPlan,
+                                  RetrievalComment = preferences.Comment
+                              };
+
+            var collection = listCommand.Execute(_activity);
+
+            foreach (var entity in collection)
+            {
+                _attachedEntities.Add(entity);
+            }
+
+            return collection;
+        }
+
+        public CustomDBProc BuildStoredProcedure(string procName)
+        {
+            return _activity.CreateCustomDBProc(procName);
+        }
+
+        public void Save(DomainEntityBase unsavedEntity)
+        {
+            new Save(unsavedEntity).Execute(_activity);
         }
 
         public void Flush()
@@ -52,10 +106,21 @@ namespace QuantivContrib.Core
 
         private void Flush(bool createNewActivity)
         {
+            if (ReadOnly) { return; }
+
             _activityController.Post();
+
             if (createNewActivity)
             {
                 CreateActivity();
+            }
+        }
+
+        private void AutoSaveDirtyEntities()
+        {
+            foreach (var entity in _attachedEntities.Where(entity => entity.Dirty))
+            {
+                new Save(entity).Execute(_activity);
             }
         }
         
@@ -73,14 +138,15 @@ namespace QuantivContrib.Core
 
         private void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (_disposed) { return; }
+
+            if (disposing && AutoSave)
             {
-                if (disposing)
-                {
-                    Flush(false);
-                }
-                _disposed = true;
+                AutoSaveDirtyEntities();
+                Flush(false);
             }
+
+            _disposed = true;
         }
     }
 }

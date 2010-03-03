@@ -2,11 +2,11 @@
 
 namespace QuantivContrib.Core.Commands
 {
-    public class SaveNewEntity : DomainEntityRepositoryCommandBase
+    public class Save : DomainEntityRepositoryCommandBase
     {
         public DomainEntityBase UnsavedEntity { get; private set; }
 
-        public SaveNewEntity(DomainEntityBase unsavedEntity)
+        public Save(DomainEntityBase unsavedEntity)
         {
             UnsavedEntity = unsavedEntity;
         }
@@ -14,6 +14,7 @@ namespace QuantivContrib.Core.Commands
         public override void Execute(Activity activity)
         {
             UnsavedEntity.QuantivEntity.Save(activity);
+            UnsavedEntity.Dirty = false;
         }
     }
 }

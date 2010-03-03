@@ -39,6 +39,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\MbUnit\bin\MbUnit.Framework.2.0.dll</HintPath>
     </Reference>
+    <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
+    <Reference Include="Quantiv.Runtime.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestDomainModel\ConsumerCreditCardMandate.cs" />
+    <Compile Include="TestDomainModel\Settlement.cs" />
+    <Compile Include="TestDomainModel\WebDirectory.cs" />
     <Compile Include="TestDomainModel\Donation.cs" />
     <Compile Include="MisplacedIntegrationTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +67,9 @@
       <Project>{D16006B1-5BD9-4877-8A32-BEA91241BBBF}</Project>
       <Name>QuantivContrib.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

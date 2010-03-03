@@ -6,25 +6,25 @@ namespace QuantivContrib.Test.Unit.TestDomainModel
     [Entity]
     public class ConsumerCreditCardMandate : DomainEntityBase
     {
-        [Id, Attribute]
+        [Id, AttributeRef]
         public virtual int ConsumerCreditCardMandateId { get; set; }
 
-        [Attribute]
+        [AttributeRef]
         public virtual int FundraiserRevenueStreamId { get; set; }
 
-        [Attribute]
+        [AttributeRef]
         public virtual decimal Amount { get; set; }
 
-        [Attribute]
+        [AttributeRef]
         public virtual int ConsumerCreditCardId { get; set; }
 
-        [Attribute]
+        [AttributeRef]
         public virtual int DonationOriginId { get; set; }
 
-        [Attribute]
+        [AttributeRef]
         public virtual int DonationSourceId { get; set; }
 
-        [Attribute("IsUKTaxPayer")]
+        [AttributeRef("IsUKTaxPayer")]
         public virtual bool IsUkTaxPayer { get; set; }
     }
 }
