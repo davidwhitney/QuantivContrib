@@ -9,7 +9,7 @@ namespace QuantivContrib.Core.Commands
     {
         public string FetchByPropertyName { get; private set; }
         public object FetchValue { get; private set; }
-        public object RetrievalPlan { get; set; }
+        public string RetrievalPlan { get; set; }
 
         private readonly bool _fetchById;
 
@@ -32,11 +32,14 @@ namespace QuantivContrib.Core.Commands
                 FetchByPropertyName = DetermineIdFieldName();
             }
 
-            Debug.WriteLine(string.Format("Retriving by: {0} and {1}", FetchByPropertyName, FetchValue));
+            var quantivEntityRetriever = activity.GetEntityManager(ExtractEntityNameFromType(typeof (TTypeOfObjectToRetrieve))).CreateEntityRetriever();
 
-            var quantivEntity = activity.GetEntityManager(ExtractEntityNameFromType(typeof(TTypeOfObjectToRetrieve)))
-                                        .CreateEntityRetriever()
-                                        .Retrieve(FetchByPropertyName, FetchValue);
+            if(!string.IsNullOrEmpty(RetrievalPlan))
+            {
+                quantivEntityRetriever.RetrievalPlanRef = RetrievalPlan;
+            }
+
+            var quantivEntity = quantivEntityRetriever.Retrieve(FetchByPropertyName, FetchValue);
 
             var domainEntity = ProxyGenerator.CreateClassProxy<TTypeOfObjectToRetrieve>(new EntityProxy());
             domainEntity.QuantivEntity = quantivEntity;
