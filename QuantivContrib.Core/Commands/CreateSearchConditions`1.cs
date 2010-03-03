@@ -9,7 +9,6 @@ namespace QuantivContrib.Core.Commands
             return activity.GetEntityManager(ExtractEntityNameFromType(typeof(TSearchableEntityType)))
                            .CreateEntityListRetriever()
                            .SearchConditionList;
-
         }
     }
 }

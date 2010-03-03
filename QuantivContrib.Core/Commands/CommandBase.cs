@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Castle.DynamicProxy;
+using Quantiv.Runtime;
 using QuantivContrib.Core.Attributes;
 
 namespace QuantivContrib.Core.Commands
@@ -25,6 +26,13 @@ namespace QuantivContrib.Core.Commands
             }
             
             return type.Name;
+        }
+
+        protected TProxiedType CreateProxiedEntity<TProxiedType>(Entity quantivEntity) where TProxiedType : DomainEntityBase, new()
+        {
+            var domainEntity = ProxyGenerator.CreateClassProxy<TProxiedType>(new EntityProxy());
+            domainEntity.QuantivEntity = quantivEntity;
+            return domainEntity;
         }
     }
 }

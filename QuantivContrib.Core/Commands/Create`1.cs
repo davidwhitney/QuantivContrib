@@ -7,11 +7,7 @@ namespace QuantivContrib.Core.Commands
         public override TTypeOfObjectToCreate Execute(Activity activity)
         {
             var quantivEntity = activity.GetEntityManager(ExtractEntityNameFromType(typeof(TTypeOfObjectToCreate))).CreateEntity();
-
-            var domainEntity = ProxyGenerator.CreateClassProxy<TTypeOfObjectToCreate>(new EntityProxy());
-            domainEntity.QuantivEntity = quantivEntity;
-
-            return domainEntity;
+            return CreateProxiedEntity<TTypeOfObjectToCreate>(quantivEntity);
         }
     }
 }

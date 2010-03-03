@@ -34,17 +34,18 @@ namespace QuantivContrib.Core.Commands
 
             var quantivEntityRetriever = activity.GetEntityManager(ExtractEntityNameFromType(typeof (TTypeOfObjectToRetrieve))).CreateEntityRetriever();
 
+            ConfigureRetrivalPlan(quantivEntityRetriever);
+            var quantivEntity = quantivEntityRetriever.Retrieve(FetchByPropertyName, FetchValue);
+            var domainEntity = CreateProxiedEntity<TTypeOfObjectToRetrieve>(quantivEntity);
+            return domainEntity;
+        }
+
+        private void ConfigureRetrivalPlan(EntityRetriever quantivEntityRetriever)
+        {
             if(!string.IsNullOrEmpty(RetrievalPlan))
             {
                 quantivEntityRetriever.RetrievalPlanRef = RetrievalPlan;
             }
-
-            var quantivEntity = quantivEntityRetriever.Retrieve(FetchByPropertyName, FetchValue);
-
-            var domainEntity = ProxyGenerator.CreateClassProxy<TTypeOfObjectToRetrieve>(new EntityProxy());
-            domainEntity.QuantivEntity = quantivEntity;
-
-            return domainEntity;
         }
 
         private static string DetermineIdFieldName()

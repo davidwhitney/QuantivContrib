@@ -1,4 +1,5 @@
-﻿using Quantiv.Runtime;
+﻿using System.Linq;
+using Quantiv.Runtime;
 
 namespace QuantivContrib.Core.Commands
 {
@@ -29,16 +30,7 @@ namespace QuantivContrib.Core.Commands
             }
 
             var entityList = entityListRetriever.Retrieve();
-
-            var typedEntities = new System.Collections.Generic.List<TTypeOfObjectToCreate>();
-            foreach (var quantivEntity in entityList)
-            {
-                var domainEntity = ProxyGenerator.CreateClassProxy<TTypeOfObjectToCreate>(new EntityProxy());
-                domainEntity.QuantivEntity = quantivEntity;
-                typedEntities.Add(domainEntity);
-            }
-
-            return typedEntities;
+            return entityList.Select(quantivEntity => CreateProxiedEntity<TTypeOfObjectToCreate>(quantivEntity)).ToList();
         }
     }
 }
