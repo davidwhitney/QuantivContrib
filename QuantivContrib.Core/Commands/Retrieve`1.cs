@@ -36,8 +36,7 @@ namespace QuantivContrib.Core.Commands
 
             ConfigureRetrivalPlan(quantivEntityRetriever);
             var quantivEntity = quantivEntityRetriever.Retrieve(FetchByPropertyName, FetchValue);
-            var domainEntity = CreateProxiedEntity<TTypeOfObjectToRetrieve>(quantivEntity);
-            return domainEntity;
+            return CreateProxiedEntity<TTypeOfObjectToRetrieve>(quantivEntity);
         }
 
         private void ConfigureRetrivalPlan(EntityRetriever quantivEntityRetriever)
