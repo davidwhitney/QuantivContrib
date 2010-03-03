@@ -39,8 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\MbUnit\bin\MbUnit.Framework.2.0.dll</HintPath>
     </Reference>
-    <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
-    <Reference Include="Quantiv.Runtime.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -63,6 +61,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MockQuantiv.Runtime\MockQuantiv.csproj">
+      <Project>{2563D0C5-3913-4934-A996-633B4ABBCF6E}</Project>
+      <Name>MockQuantiv</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QuantivContrib.Core\QuantivContrib.Core.csproj">
       <Project>{D16006B1-5BD9-4877-8A32-BEA91241BBBF}</Project>
       <Name>QuantivContrib.Core</Name>

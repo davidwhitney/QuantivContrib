@@ -11,5 +11,10 @@ namespace Quantiv.Runtime
         {
             return new EntityManager();
         }
+
+        public CustomDBProc CreateCustomDBProc(string procName)
+        {
+            return new CustomDBProc();
+        }
     }
 }
