@@ -17,7 +17,14 @@ namespace QuantivContrib.Core.Commands
         protected static string ExtractEntityNameFromType(Type type)
         {
             var classRefAttribute = type.GetCustomAttributes(typeof(EntityAttribute), false).FirstOrDefault();
-            return classRefAttribute != null ? ((EntityAttribute)classRefAttribute).ClassRef : type.Name;
-        } 
+            
+            if (classRefAttribute != null)
+            {
+                var classRefFromAttribute = ((EntityAttribute)classRefAttribute).ClassRef;
+                return !string.IsNullOrEmpty(classRefFromAttribute) ? classRefFromAttribute : type.Name;
+            }
+            
+            return type.Name;
+        }
     }
 }
