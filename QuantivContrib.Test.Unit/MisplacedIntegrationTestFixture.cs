@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using MbUnit.Framework;
+using NUnit.Framework;
 using Quantiv.Runtime.Support.Enumerations;
 using QuantivContrib.Core;
 using QuantivContrib.Test.Unit.TestDomainModel;
@@ -9,10 +9,12 @@ namespace QuantivContrib.Test.Unit
     [TestFixture]
     public class MisplacedIntegrationTestFixture
     {
+        private const string CONTROLLER_POOL = "BB01_Donation";
+
         [Test]
         public void FullEndToEndExample()
         {
-            using (var session = new EntityActivityScope("BB01_Donation"))
+            using (var session = new EntityActivityScope(CONTROLLER_POOL))
             {
                 var mandate = session.Create<ConsumerCreditCardMandate>();
 
@@ -27,7 +29,7 @@ namespace QuantivContrib.Test.Unit
         [Test]
         public void CanSearchForRasha25InWebDirectory()
         {
-            using (var session = new EntityActivityScope("BB01_Donation"))
+            using (var session = new EntityActivityScope(CONTROLLER_POOL))
             {
                 var searchConditions = session.BuildSearchConditionsForEntity<WebDirectory>();
                 searchConditions.AddCondition("WebDirectoryName", "rasha25", SearchRelationType.Equal, true);
@@ -46,7 +48,7 @@ namespace QuantivContrib.Test.Unit
         [Test]
         public void CanGetADbProc()
         {
-            using (var session = new EntityActivityScope("BB01_Donation"))
+            using (var session = new EntityActivityScope(CONTROLLER_POOL))
             {
                 var dbProc = session.BuildStoredProcedure("myProc");
                 dbProc.AddInputParameter("a","b");
@@ -55,42 +57,56 @@ namespace QuantivContrib.Test.Unit
         }
 
         [Test]
-        public void CreateAndThenEditViaAutoSave()
+        public void EntityActivityScope_WhenNewItemIsCreatedThenEdited_EditedValuesPersisted()
         {
-            int internalSettlementId;
+            const int initialCreditApprovedCount = 10;
+            const int ammendedCreditApprovedCount = 30;
 
-            using (var session = new EntityActivityScope("BB01_Donation"))
+            int createdSettlementId;
+            using (var session = new EntityActivityScope(CONTROLLER_POOL))
             {
                 var settlement = session.Create<Settlement>();
-                settlement.CreditApprovedCount = 10;
-
-                internalSettlementId = settlement.InternalSettlementId;
+                settlement.CreditApprovedCount = initialCreditApprovedCount;
+                createdSettlementId = settlement.InternalSettlementId;
             }
 
-            using (var session = new EntityActivityScope("BB01_Donation"))
+            using (var session = new EntityActivityScope(CONTROLLER_POOL))
             {
-                var settlement = session.Retrieve<Settlement>(internalSettlementId);
-                settlement.CreditApprovedCount = 30;
+                var settlement = session.Retrieve<Settlement>(createdSettlementId);
+                settlement.CreditApprovedCount = ammendedCreditApprovedCount;
+            }
+
+            using (var session = new EntityActivityScope(CONTROLLER_POOL) { ReadOnly = true })
+            {
+                var settlement = session.Retrieve<Settlement>(createdSettlementId);
+                Assert.AreEqual(ammendedCreditApprovedCount, settlement.CreditApprovedCount, "Ammending a value failed. Did the session flush?");
             }
         }
 
         [Test]
-        public void CreateAndThenEdit_ShouldLooseChangesDueToReadOnlyMode()
+        public void EntityActivityScope_WhenNewItemIsCreatedThenEditedInAReadOnlySession_EditedValuesNotPersisted()
         {
-            int internalSettlementId;
+            const int initialCreditApprovedCount = 10;
+            const int ammendedCreditApprovedCount = 30;
 
-            using (var session = new EntityActivityScope("BB01_Donation"))
+            int createdSettlementId;
+            using (var session = new EntityActivityScope(CONTROLLER_POOL))
             {
                 var settlement = session.Create<Settlement>();
-                settlement.CreditApprovedCount = 10;
-
-                internalSettlementId = settlement.InternalSettlementId;
+                settlement.CreditApprovedCount = initialCreditApprovedCount;
+                createdSettlementId = settlement.InternalSettlementId;
             }
 
-            using (var session = new EntityActivityScope("BB01_Donation") { ReadOnly = true })
+            using (var session = new EntityActivityScope(CONTROLLER_POOL) { ReadOnly = true })
             {
-                var settlement = session.Retrieve<Settlement>(internalSettlementId);
-                settlement.CreditApprovedCount = 30;
+                var settlement = session.Retrieve<Settlement>(createdSettlementId);
+                settlement.CreditApprovedCount = ammendedCreditApprovedCount;
+            }
+
+            using (var session = new EntityActivityScope(CONTROLLER_POOL) { ReadOnly = true })
+            {
+                var settlement = session.Retrieve<Settlement>(createdSettlementId);
+                Assert.AreEqual(initialCreditApprovedCount, settlement.CreditApprovedCount, "ReadOnly session saved some changes.");
             }
         }
     }
