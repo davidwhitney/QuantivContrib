@@ -114,6 +114,10 @@ namespace QuantivContrib.Core
             {
                 CreateActivity();
             }
+            else
+            {
+                ActivityControllerPooler.ReleaseController(_activityController);
+            }
         }
 
         private void AutoSaveDirtyEntities()
