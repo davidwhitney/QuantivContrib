@@ -109,14 +109,11 @@ namespace QuantivContrib.Core
             if (ReadOnly) { return; }
 
             _activityController.Post();
+            ActivityControllerPooler.ReleaseController(_activityController);
 
             if (createNewActivity)
             {
                 CreateActivity();
-            }
-            else
-            {
-                ActivityControllerPooler.ReleaseController(_activityController);
             }
         }
 
