@@ -1,0 +1,11 @@
+# VS Bits
+obj
+bin
+*.suo
+Publish.xml
+
+# ReSharper
+_ReSharper.*
+_Reflector.*
+*.user
+

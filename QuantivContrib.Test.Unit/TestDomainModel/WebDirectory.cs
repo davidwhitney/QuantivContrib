@@ -1,6 +1,7 @@
 using System;
 using QuantivContrib.Core;
-using QuantivContrib.Core.Attributes;
+using QuantivContrib.Core.QuantivActiveRecord;
+using QuantivContrib.Core.QuantivActiveRecord.Attributes;
 
 namespace QuantivContrib.Test.Unit.TestDomainModel
 {

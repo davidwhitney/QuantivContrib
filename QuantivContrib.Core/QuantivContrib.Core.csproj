@@ -44,9 +44,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Castle.DynamicProxy-2.2\bin\net-35\Castle.DynamicProxy2.dll</HintPath>
     </Reference>
-    <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
-    <Reference Include="Quantiv.Runtime.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
-    <Reference Include="Quantiv.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL" />
+    <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Quantiv.Runtime.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Runtime.Support.dll</HintPath>
+    </Reference>
+    <Reference Include="Quantiv.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Support.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -64,23 +73,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivityScope.cs" />
-    <Compile Include="Attributes\AttributeRefAttribute.cs" />
-    <Compile Include="Commands\CommandBase.cs" />
-    <Compile Include="Commands\List`1.cs" />
-    <Compile Include="Commands\CreateSearchConditions`1.cs" />
-    <Compile Include="Commands\DomainEntityRepositoryCommandBase`1.cs" />
-    <Compile Include="Commands\SaveNewEntity`1.cs" />
-    <Compile Include="Commands\Retrieve`1.cs" />
-    <Compile Include="Commands\Create`1.cs" />
-    <Compile Include="Commands\DomainEntityRepositoryCommandBase.cs" />
-    <Compile Include="DomainEntityBase.cs" />
-    <Compile Include="EntityActivityScope.cs" />
-    <Compile Include="Attributes\EntityAttribute.cs" />
-    <Compile Include="EntityProxy.cs" />
-    <Compile Include="Attributes\IdAttribute.cs" />
-    <Compile Include="ListPreferences.cs" />
+    <Compile Include="DataAccessExtensions\ActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\ConnectedEntity.cs" />
+    <Compile Include="DataAccessExtensions\EntityActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\IActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\IConnectedEntity.cs" />
+    <Compile Include="QuantivActiveRecord\ActiveRecordActivityScope.cs" />
+    <Compile Include="ApiExtensions\EntityExtensions.cs" />
+    <Compile Include="QuantivActiveRecord\Attributes\AttributeRefAttribute.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\CommandBase.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\List`1.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\CreateSearchConditions`1.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\DomainEntityRepositoryCommandBase`1.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\SaveNewEntity`1.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\Retrieve`1.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\Create`1.cs" />
+    <Compile Include="QuantivActiveRecord\Commands\DomainEntityRepositoryCommandBase.cs" />
+    <Compile Include="QuantivActiveRecord\DomainEntityBase.cs" />
+    <Compile Include="QuantivActiveRecord\EntityActivityScope.cs" />
+    <Compile Include="QuantivActiveRecord\Attributes\EntityAttribute.cs" />
+    <Compile Include="QuantivActiveRecord\EntityProxy.cs" />
+    <Compile Include="QuantivActiveRecord\Attributes\IdAttribute.cs" />
+    <Compile Include="QuantivActiveRecord\ListPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="LinqToQuantiv\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

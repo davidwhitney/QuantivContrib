@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Quantiv.Runtime.Support.Enumerations;
 using QuantivContrib.Core;
+using QuantivContrib.Core.QuantivActiveRecord;
 using QuantivContrib.Test.Unit.TestDomainModel;
 
 namespace QuantivContrib.Test.Unit

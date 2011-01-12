@@ -3,3 +3,5 @@ h1. QuantivContrib
 Spike project for an ActiveRecord style implementation to a closed source ORM framework.
 
 Mocked out components provided for testing and development in isolation.
+
+This will probably fail in your environment, I need to put some effort in to make this all portable.
