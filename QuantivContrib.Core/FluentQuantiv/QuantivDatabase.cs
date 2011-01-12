@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using Quantiv.Runtime;
 using QuantivContrib.Core.DataAccessExtensions;
 
-namespace QuantivContrib.Core.LinqToQuantiv
+namespace QuantivContrib.Core.FluentQuantiv
 {
-    public class QuantivDatabase: IQueryable<EntityQueryParts>, IQueryProvider
+    public class QuantivDatabase: IQueryable<Entity>, IQueryProvider
     {
         private ConnectedEntity _currentEntity;
         private string _entityRef;
@@ -19,7 +19,7 @@ namespace QuantivContrib.Core.LinqToQuantiv
             _queryBuilder = new FluentQueryBuilder(this);
         }
 
-        public IEnumerator<EntityQueryParts> GetEnumerator()
+        public IEnumerator<Entity> GetEnumerator()
         {
             throw new NotImplementedException();
         }
@@ -104,74 +104,6 @@ namespace QuantivContrib.Core.LinqToQuantiv
             _entityRef = entityRef;
             return _queryBuilder;
         }
-    }
-
-    public class FluentQueryBuilder : IQueryBuilderLoadType, IQuantivEntityIdentifierQueryBuilder, IBuilderSearchConditions,ILookupTargetBuilder
-    {
-        private readonly QuantivDatabase _quantivDatabase;
-        private bool _queryById;
-        private int _id;
-
-        public FluentQueryBuilder(QuantivDatabase quantivDatabase)
-        {
-            _quantivDatabase = quantivDatabase;
-        }
-
-        FluentQueryBuilder IQueryBuilderLoadType.Id(int id)
-        {
-            _queryById = true;
-            _id = id;
-
-            return this;
-        }
-
-        IBuilderSearchConditions IQueryBuilderLoadType.SearchConditions
-        {
-            get { return this; }
-        }
-
-        IQueryBuilderLoadType IQuantivEntityIdentifierQueryBuilder.By
-        {
-            get { return this; }
-        }
-
-        ILookupTargetBuilder IBuilderSearchConditions.AttributeRef(string condition)
-        {
-            return this;
-        }
-
-        public QuantivDatabase Fetch()
-        {
-            return _quantivDatabase;
-        }
-
-        IBuilderSearchConditions ILookupTargetBuilder.EqualTo<T>(T condition)
-        {
-            return this;
-        }
-    }
-
-
-    public interface IQuantivEntityIdentifierQueryBuilder
-    {
-        IQueryBuilderLoadType By { get; }
-    }
-
-    public interface IQueryBuilderLoadType
-    {
-        FluentQueryBuilder Id(int id);
-        IBuilderSearchConditions SearchConditions { get; }
-    }
-
-    public interface IBuilderSearchConditions
-    {
-        ILookupTargetBuilder AttributeRef(string condition);
-        QuantivDatabase Fetch();
-    }
-
-    public interface ILookupTargetBuilder
-    {
-        IBuilderSearchConditions EqualTo<T>(T condition);
     }
 
 }
