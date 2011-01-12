@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
+using QuantivContrib.Core.ApiExtensions;
 using QuantivContrib.Core.FluentQuantiv;
 
 namespace QuantivContrib.Test.Unit.Core.FluentQuantiv
@@ -13,7 +15,8 @@ namespace QuantivContrib.Test.Unit.Core.FluentQuantiv
 
             var entity = quantiv.Load("WebDirectory").By.SearchConditions
                                 .AttributeRef("Something").EqualTo("aaa")
-                                .Fetch();
+                                .Fetch()
+                                .Where(x => x.Get<string>("someVal") == "my val");
 
             var entit = quantiv.Load("WebDirectory").By.Id(1).Fetch();
         }
