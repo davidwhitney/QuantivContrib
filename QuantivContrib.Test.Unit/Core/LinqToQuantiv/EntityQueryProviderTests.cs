@@ -12,11 +12,11 @@ namespace QuantivContrib.Test.Unit.Core.LinqToQuantiv
         {
             var quantiv = new QuantivDatabase();
 
-            quantiv.Load("WebDirectory").By.SearchCondition
-                   .Lookup(x=> x.AttributeRef == "Something").Where(x=>x.AttributeValue == "aaa")
-                   .ToList()
-                   .Where(x=>x.Id == 1)
-                   .FirstOrDefault();
+            var entity = quantiv.Load("WebDirectory").By.SearchCondition
+                                   .Lookup(x=> x.AttributeRef == "Something").Where(x=>x.AttributeValue == "aaa")
+                                   .ToList()
+                                   .Where(x=>x.Id == 1)
+                                   .FirstOrDefault();
         }
 
     }
