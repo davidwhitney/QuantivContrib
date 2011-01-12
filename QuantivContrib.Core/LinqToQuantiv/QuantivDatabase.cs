@@ -106,9 +106,11 @@ namespace QuantivContrib.Core.LinqToQuantiv
         }
     }
 
-    public class FluentQueryBuilder : IQueryBuilderLoadType, IQuantivEntityIdentifierQueryBuilder, IQuantivEntityIdentifierQueryBuilderBySearchCondition,ILookupTargetBuilder
+    public class FluentQueryBuilder : IQueryBuilderLoadType, IQuantivEntityIdentifierQueryBuilder, IBuilderSearchConditions,ILookupTargetBuilder
     {
         private readonly QuantivDatabase _quantivDatabase;
+        private bool _queryById;
+        private int _id;
 
         public FluentQueryBuilder(QuantivDatabase quantivDatabase)
         {
@@ -117,10 +119,13 @@ namespace QuantivContrib.Core.LinqToQuantiv
 
         FluentQueryBuilder IQueryBuilderLoadType.IdField(int id)
         {
+            _queryById = true;
+            _id = id;
+
             return this;
         }
 
-        IQuantivEntityIdentifierQueryBuilderBySearchCondition IQueryBuilderLoadType.SearchConditions
+        IBuilderSearchConditions IQueryBuilderLoadType.SearchConditions
         {
             get { return this; }
         }
@@ -130,7 +135,7 @@ namespace QuantivContrib.Core.LinqToQuantiv
             get { return this; }
         }
 
-        ILookupTargetBuilder IQuantivEntityIdentifierQueryBuilderBySearchCondition.Match(Expression<Func<AttributeRefQuery, bool>> condition)
+        ILookupTargetBuilder IBuilderSearchConditions.Match(Expression<Func<AttributeRefQuery, bool>> condition)
         {
             return this;
         }
@@ -140,7 +145,7 @@ namespace QuantivContrib.Core.LinqToQuantiv
             return _quantivDatabase;
         }
 
-        IQuantivEntityIdentifierQueryBuilderBySearchCondition ILookupTargetBuilder.Where(Expression<Func<AttributeRefQueryTarget, bool>> condition)
+        IBuilderSearchConditions ILookupTargetBuilder.Where(Expression<Func<AttributeRefQueryTarget, bool>> condition)
         {
             return this;
         }
@@ -155,22 +160,18 @@ namespace QuantivContrib.Core.LinqToQuantiv
     public interface IQueryBuilderLoadType
     {
         FluentQueryBuilder IdField(int id);
-        IQuantivEntityIdentifierQueryBuilderBySearchCondition SearchConditions { get; }
+        IBuilderSearchConditions SearchConditions { get; }
     }
 
-    public interface IQuantivEntityIdentifierQueryBuilderBySearchCondition
+    public interface IBuilderSearchConditions
     {
         ILookupTargetBuilder Match(Expression<Func<AttributeRefQuery, bool>> condition);
         QuantivDatabase ToList();
     }
 
-    public class SearchConditionProxy
-    {
-    }
-
     public interface ILookupTargetBuilder
     {
-        IQuantivEntityIdentifierQueryBuilderBySearchCondition Where(Expression<Func<AttributeRefQueryTarget, bool>> condition);
+        IBuilderSearchConditions Where(Expression<Func<AttributeRefQueryTarget, bool>> condition);
     }
 
 }
