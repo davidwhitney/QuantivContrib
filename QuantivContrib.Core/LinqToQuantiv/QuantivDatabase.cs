@@ -117,7 +117,7 @@ namespace QuantivContrib.Core.LinqToQuantiv
             _quantivDatabase = quantivDatabase;
         }
 
-        FluentQueryBuilder IQueryBuilderLoadType.IdField(int id)
+        FluentQueryBuilder IQueryBuilderLoadType.Id(int id)
         {
             _queryById = true;
             _id = id;
@@ -135,17 +135,17 @@ namespace QuantivContrib.Core.LinqToQuantiv
             get { return this; }
         }
 
-        ILookupTargetBuilder IBuilderSearchConditions.Match(Expression<Func<AttributeRefQuery, bool>> condition)
+        ILookupTargetBuilder IBuilderSearchConditions.AttributeRef(string condition)
         {
             return this;
         }
 
-        public QuantivDatabase ToList()
+        public QuantivDatabase Fetch()
         {
             return _quantivDatabase;
         }
 
-        IBuilderSearchConditions ILookupTargetBuilder.Where(Expression<Func<AttributeRefQueryTarget, bool>> condition)
+        IBuilderSearchConditions ILookupTargetBuilder.EqualTo<T>(T condition)
         {
             return this;
         }
@@ -159,19 +159,19 @@ namespace QuantivContrib.Core.LinqToQuantiv
 
     public interface IQueryBuilderLoadType
     {
-        FluentQueryBuilder IdField(int id);
+        FluentQueryBuilder Id(int id);
         IBuilderSearchConditions SearchConditions { get; }
     }
 
     public interface IBuilderSearchConditions
     {
-        ILookupTargetBuilder Match(Expression<Func<AttributeRefQuery, bool>> condition);
-        QuantivDatabase ToList();
+        ILookupTargetBuilder AttributeRef(string condition);
+        QuantivDatabase Fetch();
     }
 
     public interface ILookupTargetBuilder
     {
-        IBuilderSearchConditions Where(Expression<Func<AttributeRefQueryTarget, bool>> condition);
+        IBuilderSearchConditions EqualTo<T>(T condition);
     }
 
 }

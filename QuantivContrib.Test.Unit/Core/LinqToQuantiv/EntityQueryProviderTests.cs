@@ -13,8 +13,13 @@ namespace QuantivContrib.Test.Unit.Core.LinqToQuantiv
             var quantiv = new QuantivDatabase();
 
             var entity = quantiv.Load("WebDirectory").By.SearchConditions
-                                   .Match(x=> x.AttributeRef == "Something").Where(x=>x.AttributeValue == "aaa")
-                                   .ToList()
+                                   .AttributeRef("Something").EqualTo("aaa")
+                                   .Fetch()
+                                   .Where(x=>x.Id == 1)
+                                   .FirstOrDefault();
+
+            var entit = quantiv.Load("WebDirectory").By.Id(1)
+                                   .Fetch()
                                    .Where(x=>x.Id == 1)
                                    .FirstOrDefault();
         }
