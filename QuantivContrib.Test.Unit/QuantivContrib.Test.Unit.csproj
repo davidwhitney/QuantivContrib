@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\EntityExtensionTests.cs" />
+    <Compile Include="Core\LinqToQuantiv\EntityQueryProviderTests.cs" />
     <Compile Include="TestDomainModel\ConsumerCreditCardMandate.cs" />
     <Compile Include="TestDomainModel\Settlement.cs" />
     <Compile Include="TestDomainModel\WebDirectory.cs" />

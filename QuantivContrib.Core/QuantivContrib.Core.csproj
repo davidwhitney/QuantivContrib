@@ -78,6 +78,8 @@
     <Compile Include="DataAccessExtensions\EntityActivitySession.cs" />
     <Compile Include="DataAccessExtensions\IActivitySession.cs" />
     <Compile Include="DataAccessExtensions\IConnectedEntity.cs" />
+    <Compile Include="LinqToQuantiv\EntityQueryParts.cs" />
+    <Compile Include="LinqToQuantiv\QuantivDatabase.cs" />
     <Compile Include="QuantivActiveRecord\ActiveRecordActivityScope.cs" />
     <Compile Include="ApiExtensions\EntityExtensions.cs" />
     <Compile Include="QuantivActiveRecord\Attributes\AttributeRefAttribute.cs" />
@@ -97,9 +99,7 @@
     <Compile Include="QuantivActiveRecord\ListPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="LinqToQuantiv\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
