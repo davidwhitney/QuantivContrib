@@ -12,6 +12,12 @@ namespace QuantivContrib.Core.LinqToQuantiv
     {
         private ConnectedEntity _currentEntity;
         private string _entityRef;
+        private readonly FluentQueryBuilder _queryBuilder;
+
+        public QuantivDatabase()
+        {
+            _queryBuilder = new FluentQueryBuilder(this);
+        }
 
         public IEnumerator<EntityQueryParts> GetEnumerator()
         {
@@ -93,80 +99,78 @@ namespace QuantivContrib.Core.LinqToQuantiv
             }
         }
 
-        public QuantivEntityIdentifierQueryBuilder Load(string entityRef)
+        public IQuantivEntityIdentifierQueryBuilder Load(string entityRef)
         {
             _entityRef = entityRef;
-            return new QuantivEntityIdentifierQueryBuilder(this);
+            return _queryBuilder;
         }
     }
 
-    public class QuantivEntityIdentifierQueryBuilder
+    public class FluentQueryBuilder : IQueryBuilderLoadType, IQuantivEntityIdentifierQueryBuilder, IQuantivEntityIdentifierQueryBuilderBySearchCondition,ILookupTargetBuilder
     {
         private readonly QuantivDatabase _quantivDatabase;
-        public QuantivEntityIdentifierQueryBuilderBy By { get; private set; }
 
-        public QuantivEntityIdentifierQueryBuilder(QuantivDatabase quantivDatabase)
+        public FluentQueryBuilder(QuantivDatabase quantivDatabase)
         {
             _quantivDatabase = quantivDatabase;
-            By = new QuantivEntityIdentifierQueryBuilderBy(_quantivDatabase);
-        }
-    }
-
-    public class QuantivEntityIdentifierQueryBuilderBy
-    {
-        public QuantivEntityIdentifierQueryBuilderBySearchCondition SearchCondition { get; private set; }
-        
-        private readonly QuantivDatabase _quantivDatabase;
-
-        public QuantivEntityIdentifierQueryBuilderBy(QuantivDatabase quantivDatabase)
-        {
-            _quantivDatabase = quantivDatabase;
-            SearchCondition = new QuantivEntityIdentifierQueryBuilderBySearchCondition(_quantivDatabase);
         }
 
-        public QuantivDatabase Id(int id)
+        FluentQueryBuilder IQueryBuilderLoadType.IdField(int id)
         {
-            return _quantivDatabase;
-        }
-    }
-
-    public class QuantivEntityIdentifierQueryBuilderBySearchCondition
-    {
-        private readonly QuantivDatabase _quantivDatabase;
-        private readonly LookupTargetBuilder _lookupTargetBuilder;
-
-        public QuantivEntityIdentifierQueryBuilderBySearchCondition(QuantivDatabase quantivDatabase)
-        {
-            _quantivDatabase = quantivDatabase;
-            _lookupTargetBuilder = new LookupTargetBuilder(quantivDatabase, this);
+            return this;
         }
 
-        public LookupTargetBuilder Lookup(Expression<Func<AttributeRefQuery, bool>> condition)
+        IQuantivEntityIdentifierQueryBuilderBySearchCondition IQueryBuilderLoadType.SearchConditions
         {
-            return _lookupTargetBuilder;
+            get { return this; }
+        }
+
+        IQueryBuilderLoadType IQuantivEntityIdentifierQueryBuilder.By
+        {
+            get { return this; }
+        }
+
+        ILookupTargetBuilder IQuantivEntityIdentifierQueryBuilderBySearchCondition.Match(Expression<Func<AttributeRefQuery, bool>> condition)
+        {
+            return this;
         }
 
         public QuantivDatabase ToList()
         {
             return _quantivDatabase;
         }
+
+        IQuantivEntityIdentifierQueryBuilderBySearchCondition ILookupTargetBuilder.Where(Expression<Func<AttributeRefQueryTarget, bool>> condition)
+        {
+            return this;
+        }
     }
 
-    public class LookupTargetBuilder
+
+    public interface IQuantivEntityIdentifierQueryBuilder
     {
-        private readonly QuantivDatabase _quantivDatabase;
-        private readonly QuantivEntityIdentifierQueryBuilderBySearchCondition _quantivEntityIdentifierQueryBuilderBySearchCondition;
+        IQueryBuilderLoadType By { get; }
+    }
 
-        public LookupTargetBuilder(QuantivDatabase quantivDatabase, QuantivEntityIdentifierQueryBuilderBySearchCondition quantivEntityIdentifierQueryBuilderBySearchCondition)
-        {
-            _quantivDatabase = quantivDatabase;
-            _quantivEntityIdentifierQueryBuilderBySearchCondition = quantivEntityIdentifierQueryBuilderBySearchCondition;
-        }
+    public interface IQueryBuilderLoadType
+    {
+        FluentQueryBuilder IdField(int id);
+        IQuantivEntityIdentifierQueryBuilderBySearchCondition SearchConditions { get; }
+    }
 
-        public QuantivEntityIdentifierQueryBuilderBySearchCondition Where(Expression<Func<AttributeRefQueryTarget, bool>> condition)
-        {
-            return _quantivEntityIdentifierQueryBuilderBySearchCondition;
-        }
+    public interface IQuantivEntityIdentifierQueryBuilderBySearchCondition
+    {
+        ILookupTargetBuilder Match(Expression<Func<AttributeRefQuery, bool>> condition);
+        QuantivDatabase ToList();
+    }
+
+    public class SearchConditionProxy
+    {
+    }
+
+    public interface ILookupTargetBuilder
+    {
+        IQuantivEntityIdentifierQueryBuilderBySearchCondition Where(Expression<Func<AttributeRefQueryTarget, bool>> condition);
     }
 
 }

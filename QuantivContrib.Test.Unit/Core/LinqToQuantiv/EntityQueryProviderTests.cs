@@ -12,8 +12,8 @@ namespace QuantivContrib.Test.Unit.Core.LinqToQuantiv
         {
             var quantiv = new QuantivDatabase();
 
-            var entity = quantiv.Load("WebDirectory").By.SearchCondition
-                                   .Lookup(x=> x.AttributeRef == "Something").Where(x=>x.AttributeValue == "aaa")
+            var entity = quantiv.Load("WebDirectory").By.SearchConditions
+                                   .Match(x=> x.AttributeRef == "Something").Where(x=>x.AttributeValue == "aaa")
                                    .ToList()
                                    .Where(x=>x.Id == 1)
                                    .FirstOrDefault();
