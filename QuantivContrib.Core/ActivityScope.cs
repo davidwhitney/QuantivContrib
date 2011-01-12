@@ -109,7 +109,15 @@ namespace QuantivContrib.Core
             if (ReadOnly) { return; }
 
             _activityController.Post();
-            ActivityControllerPooler.ReleaseController(_activityController);
+
+            try
+            {
+                ActivityControllerPooler.ReleaseController(_activityController);
+            }
+            catch
+            {
+                // Not threadsafe. Apparently Quantiv Pooling is a badly implemented
+            }
 
             if (createNewActivity)
             {

@@ -3,20 +3,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2563D0C5-3913-4934-A996-633B4ABBCF6E}</ProjectGuid>
+    <ProjectGuid>{CE962BD5-9C61-412A-96E6-BFE9B5B42695}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Quantiv</RootNamespace>
-    <AssemblyName>Quantiv</AssemblyName>
+    <RootNamespace>QuantivContrib.NHibernateCompatability</RootNamespace>
+    <AssemblyName>QuantivContrib.NHibernateCompatability</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,33 +31,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\ExternalLibs\FluentNhibernate\1.1\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2">
+      <HintPath>..\ExternalLibs\FluentNhibernate\1.1\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\ExternalLibs\FluentNhibernate\1.1\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\ExternalLibs\FluentNhibernate\1.1\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Runtime\Activity.cs" />
-    <Compile Include="Runtime\ActivityController.cs" />
-    <Compile Include="Runtime\ActivityControllerPooler.cs" />
-    <Compile Include="Runtime\CustomDBProc.cs" />
-    <Compile Include="Runtime\Entity.cs" />
-    <Compile Include="Runtime\EntityListRetriever.cs" />
-    <Compile Include="Runtime\EntityManager.cs" />
-    <Compile Include="Runtime\EntityRetriever.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\SearchConditionList.cs" />
-    <Compile Include="Runtime\Support\Enumerations\SearchRelationType.cs" />
-    <Compile Include="Runtime\Support\INonLegacyObject.cs" />
-    <Compile Include="Support\IManagedDisposal.cs" />
+    <Compile Include="QuantivIdGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
