@@ -79,7 +79,7 @@
     <Compile Include="DataAccessExtensions\IActivitySession.cs" />
     <Compile Include="DataAccessExtensions\IConnectedEntity.cs" />
     <Compile Include="FluentQuantiv\FluentQueryBuilder.cs" />
-    <Compile Include="FluentQuantiv\QuantivDatabase.cs" />
+    <Compile Include="FluentQuantiv\QuantivEntityQuery.cs" />
     <Compile Include="QuantivActiveRecord\ActiveRecordActivityScope.cs" />
     <Compile Include="ApiExtensions\EntityExtensions.cs" />
     <Compile Include="QuantivActiveRecord\Attributes\AttributeRefAttribute.cs" />

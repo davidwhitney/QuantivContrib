@@ -1,69 +1,85 @@
-﻿namespace QuantivContrib.Core.FluentQuantiv
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using Quantiv.Runtime;
+
+namespace QuantivContrib.Core.FluentQuantiv
 {
-    public class FluentQueryBuilder : IQueryBuilderLoadType, IQuantivEntityIdentifierQueryBuilder, IBuilderSearchConditions,ILookupTargetBuilder
+    public class FluentQueryBuilder
     {
-        private readonly QuantivDatabase _quantivDatabase;
+        private const string ControllerPool = "BB01_Donation";
+        private const string ActivityRef = "_EntityActivity";
+
         private bool _queryById;
         private int _id;
+        private string _entityClassRef;
 
-        public FluentQueryBuilder(QuantivDatabase quantivDatabase)
+        public FluentQueryBuilder(string entityClassRef)
         {
-            _quantivDatabase = quantivDatabase;
+            _entityClassRef = entityClassRef;
         }
 
-        FluentQueryBuilder IQueryBuilderLoadType.Id(int id)
+        public void AddQueryPart(MemberExpression leftItem, ConstantExpression rightValue, ExpressionType nodeType)
         {
-            _queryById = true;
-            _id = id;
+            if(leftItem.Member == typeof(Entity).GetMember("EntityName")[0])
+            {
+                if(nodeType != ExpressionType.Equal)
+                {
+                    throw new InvalidOperationException("You may only specify equals for EntityName.");
+                }
 
-            return this;
+                _entityClassRef = rightValue.Value.ToString();
+            }
+
+            if(leftItem.Member == typeof(Entity).GetMember("EntityId")[0])
+            {
+                _queryById = true;
+                if(nodeType != ExpressionType.Equal)
+                {
+                    throw new InvalidOperationException("You may only specify equals for EntityId.");
+                }
+
+                _id = (int)rightValue.Value;
+            }
         }
 
-        IBuilderSearchConditions IQueryBuilderLoadType.SearchConditions
+        public IList<Entity> ExecuteQuery()
         {
-            get { return this; }
+            var activityController = ActivityControllerPooler.AllocateController(ControllerPool);
+
+            try
+            {
+                var activity = activityController.StartActivity(ActivityRef);
+
+                var manager = activity.GetEntityManager(_entityClassRef);
+                var retriever = manager.CreateEntityRetriever();
+
+                return _queryById ? ExecuteQueryById(retriever) : ExecuteSearchQuery(retriever);
+            }
+            finally
+            {
+                try
+                {
+                    activityController.EndCurrentActivity();
+                    ActivityControllerPooler.ReleaseController(activityController);
+                }
+                catch
+                {
+                    // Can't fix this.
+                }
+            }
         }
 
-        IQueryBuilderLoadType IQuantivEntityIdentifierQueryBuilder.By
+        private IList<Entity> ExecuteQueryById(EntityRetriever retriever)
         {
-            get { return this; }
+            var one = retriever.Retrieve(_entityClassRef + "Id", _id);
+            return new List<Entity> { one };
         }
 
-        ILookupTargetBuilder IBuilderSearchConditions.AttributeRef(string condition)
+        private IList<Entity> ExecuteSearchQuery(EntityRetriever retriever)
         {
-            return this;
+            var one = retriever.Retrieve(_entityClassRef + "Id", _id);
+            return new List<Entity> { one };
         }
-
-        public QuantivDatabase Fetch()
-        {
-            return _quantivDatabase;
-        }
-
-        IBuilderSearchConditions ILookupTargetBuilder.EqualTo<T>(T condition)
-        {
-            return this;
-        }
-    }
-
-    public interface IQuantivEntityIdentifierQueryBuilder
-    {
-        IQueryBuilderLoadType By { get; }
-    }
-
-    public interface IQueryBuilderLoadType
-    {
-        FluentQueryBuilder Id(int id);
-        IBuilderSearchConditions SearchConditions { get; }
-    }
-
-    public interface IBuilderSearchConditions
-    {
-        ILookupTargetBuilder AttributeRef(string condition);
-        QuantivDatabase Fetch();
-    }
-
-    public interface ILookupTargetBuilder
-    {
-        IBuilderSearchConditions EqualTo<T>(T condition);
     }
 }

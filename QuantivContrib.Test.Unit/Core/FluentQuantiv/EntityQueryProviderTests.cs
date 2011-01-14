@@ -11,14 +11,25 @@ namespace QuantivContrib.Test.Unit.Core.FluentQuantiv
         [Test]
         public void MethodName_State_ExpectedResult()
         {
-            var quantiv = new QuantivDatabase();
 
-            var entity = quantiv.Load("WebDirectory").By.SearchConditions
+            /*var entity = quantiv.Load("WebDirectory").By.SearchConditions
                                 .AttributeRef("Something").EqualTo("aaa")
                                 .Fetch()
-                                .Where(x => x.Get<string>("someVal") == "my val");
+                                .Where(x => x.Get<string>("someVal") == "my val")
+                                .Where(x => x.EntityName == "WebDirectory");*/
 
-            var entit = quantiv.Load("WebDirectory").By.Id(1).Fetch();
+
+            //var ent = quantiv.Where(x => x.EntityName == "WebDirectory").ToList();
+/*
+            var query = new QuantivEntityQuery("WebDirectory").Where(x => x.EntityId == 1)
+                                                              .Where(x => x.Get<string>("WebDirectoryName") == "davids-page")
+                                                              .FirstOrDefault();*/
+
+            var query2 = new QuantivEntityQuery("WebDirectory").Where(x => x.EntityId == 1 && x.Get<string>("WebDirectoryName") == "davids-page")
+                                                               .FirstOrDefault();
+
+
+            //var entit = quantiv.Load("WebDirectory").By.Id(1).Fetch();
         }
 
     }
