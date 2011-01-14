@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Dynamic;
+using System.Linq;
 using NUnit.Framework;
+using Quantiv.Runtime;
 using QuantivContrib.Core.ApiExtensions;
 using QuantivContrib.Core.FluentQuantiv;
 
@@ -20,16 +22,19 @@ namespace QuantivContrib.Test.Unit.Core.FluentQuantiv
 
 
             //var ent = quantiv.Where(x => x.EntityName == "WebDirectory").ToList();
-/*
-            var query = new QuantivEntityQuery("WebDirectory").Where(x => x.EntityId == 1)
-                                                              .Where(x => x.Get<string>("WebDirectoryName") == "davids-page")
-                                                              .FirstOrDefault();*/
-
-            var query2 = new QuantivEntityQuery("WebDirectory").Where(x => x.EntityId == 1 && x.Get<string>("WebDirectoryName") == "davids-page")
+            /*
+            var query1 = new EntityQuery("WebDirectory").Where(x => x.EntityId == 1)
+                                                               .Where(x => x.Get<string>("WebDirectoryName") == "davids-page")
                                                                .FirstOrDefault();
 
+            var query2 = new EntityQuery("WebDirectory").Where(x => x.EntityId == 1 && x.Get<string>("WebDirectoryName") == "davids-page")
+                                                               .FirstOrDefault();
 
-            //var entit = quantiv.Load("WebDirectory").By.Id(1).Fetch();
+            */
+
+
+            var query1 = new EntityQuery("WebDirectory").Where(x=> x["WebDirectoryName"] == "abc").ToList();
+
         }
 
     }
