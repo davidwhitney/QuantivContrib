@@ -5,23 +5,23 @@ namespace QuantivContrib.Core.FluentQuantiv
 {
     public class QueryableEntity
     {
-        public Entity NativeEntity { get; set; }
+        public Entity QuantivEntity { get; set; }
 
         public int EntityId { get; set; }
 
         public QueryableEntity(Entity quantivEntity)
         {
-            NativeEntity = quantivEntity;
+            QuantivEntity = quantivEntity;
         }
 
         public QueryableAttributeValue this[string attributeRef]
         {
-            get { return new QueryableAttributeValue(NativeEntity.GetAttributeValue(attributeRef)); }
+            get { return new QueryableAttributeValue(QuantivEntity.GetAttributeValue(attributeRef)); }
         }
 
         public static implicit operator Entity(QueryableEntity me)
         {
-            return me.NativeEntity;
+            return me.QuantivEntity;
         }
     }
 

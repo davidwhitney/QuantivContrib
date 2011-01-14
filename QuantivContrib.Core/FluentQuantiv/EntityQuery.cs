@@ -62,7 +62,7 @@ namespace QuantivContrib.Core.FluentQuantiv
 
         public object Execute(Expression expression)
         {
-            throw new NotImplementedException();
+            return Execute<object>(expression);
         }
 
         public TResult Execute<TResult>(Expression expression)
@@ -104,16 +104,23 @@ namespace QuantivContrib.Core.FluentQuantiv
                 }
                 else if (leftItem is ConstantExpression && rightValue is MemberExpression)
                 {
-                    var invertedNodeType = InvertExpressionType(binaryExpression.NodeType);
-                    _queryBuilder.AddQueryPart((MemberExpression)rightValue, (ConstantExpression)leftItem, invertedNodeType);
+                    _queryBuilder.AddQueryPart((MemberExpression)rightValue, (ConstantExpression)leftItem, InvertExpressionType(binaryExpression.NodeType));
                 }
                 else if (leftItem is MethodCallExpression && rightValue is ConstantExpression)
                 {
                     _queryBuilder.AddQueryPart((MethodCallExpression)leftItem, (ConstantExpression)rightValue, binaryExpression.NodeType);
                 }
+                else if (leftItem is ConstantExpression && rightValue is MethodCallExpression)
+                {
+                    _queryBuilder.AddQueryPart((MethodCallExpression)rightValue, (ConstantExpression)leftItem, InvertExpressionType(binaryExpression.NodeType));
+                }
                 else if (leftItem is UnaryExpression && rightValue is ConstantExpression)
                 {
                     _queryBuilder.AddQueryPart((UnaryExpression)leftItem, (ConstantExpression)rightValue, binaryExpression.NodeType);
+                }
+                else if (leftItem is ConstantExpression && rightValue is UnaryExpression)
+                {
+                    _queryBuilder.AddQueryPart((UnaryExpression)rightValue, (ConstantExpression)leftItem, InvertExpressionType(binaryExpression.NodeType));
                 }
                 else
                 {
