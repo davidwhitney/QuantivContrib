@@ -33,7 +33,7 @@ namespace QuantivContrib.Test.Unit.Core.FluentQuantiv
             */
 
             var query1 = new EntityQuery("WebDirectory").Where(x=> x["WebDirectoryName"] == "abc").ToList();
-
+            
         }
 
     }

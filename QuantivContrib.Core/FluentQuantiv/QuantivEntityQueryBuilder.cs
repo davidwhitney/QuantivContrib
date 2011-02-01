@@ -28,12 +28,12 @@ namespace QuantivContrib.Core.FluentQuantiv
             _controllerPool = controllerPool;
             _activityRef = activityRef;
             _entityClassRef = entityClassRef;
-/*
+
             _activityController = ActivityControllerPooler.AllocateController(_controllerPool);
             _activity = _activityController.StartActivity(_activityRef);
 
             var manager = _activity.GetEntityManager(_entityClassRef);
-            _retriever = manager.CreateEntityListRetriever();*/ //TODO: Uncomment this when connected to QTV again
+            _retriever = manager.CreateEntityListRetriever();
         }
         
         public void OpenQueryPart()
@@ -103,9 +103,6 @@ namespace QuantivContrib.Core.FluentQuantiv
 
         private void AddCriteriaToActiveSearchCondition(string attributeRef, object value, SearchRelationType searchRelationType)
         {
-            return; // TODO: Remove me to enable building of criteria
-
-
             _retriever.SearchConditionList.AddCondition(attributeRef, value, searchRelationType, true);
         }
 

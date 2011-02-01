@@ -53,6 +53,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Support.dll</HintPath>
     </Reference>
+    <Reference Include="Remotion.Data.Linq">
+      <HintPath>..\ExternalLibs\ReLinq\1.13.92\net-3.5\bin\release\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
