@@ -1,7 +1,8 @@
 using System;
-using Quantiv.Runtime;
+using Quantiv.Runtime.COM;
+using Quantiv.Runtime.Support;
 
-namespace QuantivContrib.Core.DataAccessExtensions
+namespace QuantivContrib.Core.DataAccessExtensions.Com
 {
     public class ActivitySession: IDisposable, IActivitySession
     {
@@ -38,15 +39,30 @@ namespace QuantivContrib.Core.DataAccessExtensions
 
         public Entity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null)
         {
-            var manager = GetEntityManager(entityClassRef);
-            var retriever = manager.CreateEntityRetriever();
+            Entity entity;
+            var success = TryRetrieve(entityClassRef, id, out entity, retrievalPlanRef);
 
-            if (!string.IsNullOrEmpty(retrievalPlanRef))
+            if(!success)
             {
-                retriever.RetrievalPlanRef = retrievalPlanRef;
+                throw new InvalidOperationException(string.Format("Failed to retrieve '{0}' with Id '{1}'.", entityClassRef, id));
             }
 
-            return retriever.Retrieve(entityClassRef + "Id", id);
+            return entity;
+        }
+
+        public bool TryRetrieve(string entityClassRef, int id, out Entity entity, string retrievalPlanRef = null)
+        {
+            entity = GetEntityManager(entityClassRef).CreateEntity(false);
+            var searchConditionList = entity.GetSearchConditionList();
+            searchConditionList.AddCondition(entityClassRef + "Id", id, TSearchRelationType.SearchRelationType_Equal, true);
+
+            if (!string.IsNullOrWhiteSpace(retrievalPlanRef))
+            {
+                entity.SetRetrievalPlan(retrievalPlanRef);
+            }
+            
+            var success = entity.Retrieve();
+            return success;
         }
 
         public EntityManager GetEntityManager(string entityClassRef)
@@ -85,7 +101,7 @@ namespace QuantivContrib.Core.DataAccessExtensions
                 // Not threadsafe. Apparently Quantiv Pooling is a badly implemented
             }
         }
-        
+
         private void CreateActivity()
         {
             CurrentActivityController = ActivityControllerPooler.AllocateController(_controllerPool);
@@ -108,7 +124,7 @@ namespace QuantivContrib.Core.DataAccessExtensions
                 Commit(false);
             }
 
-            if (_hasActiveActivity)
+            if(_hasActiveActivity)
             {
                 EndCurrentActivity();
             }

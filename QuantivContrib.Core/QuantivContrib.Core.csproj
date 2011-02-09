@@ -48,6 +48,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\QTVRUNTIMELib.dll</HintPath>
     </Reference>
+    <Reference Include="QTVSEARCHCONDITIONSLib, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\QTVSEARCHCONDITIONSLib.dll</HintPath>
+    </Reference>
     <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Runtime.dll</HintPath>
@@ -77,8 +81,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiExtensions\ComEntityExtensions.cs" />
+    <Compile Include="ApiExtensions\Com\ComEntityExtensions.cs" />
     <Compile Include="DataAccessExtensions\ActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\Com\ActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\Com\EntityActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\Com\IActivitySession.cs" />
     <Compile Include="DataAccessExtensions\ConnectedEntity.cs" />
     <Compile Include="DataAccessExtensions\EntityActivitySession.cs" />
     <Compile Include="DataAccessExtensions\IActivitySession.cs" />

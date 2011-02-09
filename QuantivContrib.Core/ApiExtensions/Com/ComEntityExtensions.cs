@@ -1,7 +1,7 @@
 ﻿using System;
 using Quantiv.Runtime.COM;
 
-namespace QuantivContrib.Core.ApiExtensions
+namespace QuantivContrib.Core.ApiExtensions.Com
 {
     public static class ComEntityExtensions
     {
