@@ -34,7 +34,7 @@ namespace QuantivContrib.Core.DataAccessExtensions.Com
 
         public Entity Create(string entityClassRef)
         {
-            return GetEntityManager(entityClassRef).CreateEntity();
+            return GetEntityManager(entityClassRef).CreateEntity(true);
         }
 
         public Entity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null)
@@ -63,6 +63,16 @@ namespace QuantivContrib.Core.DataAccessExtensions.Com
             
             var success = entity.Retrieve();
             return success;
+        }
+
+        public void Save(Entity entity)
+        {
+            if(!_hasActiveActivity)
+            {
+                throw new InvalidOperationException("There must be an active activity to perform a save.");
+            }
+
+            entity.Save(CurrentActivity);
         }
 
         public EntityManager GetEntityManager(string entityClassRef)

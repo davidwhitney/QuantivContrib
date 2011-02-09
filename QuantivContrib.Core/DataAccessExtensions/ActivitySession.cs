@@ -49,6 +49,16 @@ namespace QuantivContrib.Core.DataAccessExtensions
             return retriever.Retrieve(entityClassRef + "Id", id);
         }
 
+        public void Save(Entity entity)
+        {
+            if (!_hasActiveActivity)
+            {
+                throw new InvalidOperationException("There must be an active activity to perform a save.");
+            }
+
+            entity.Save(CurrentActivity);
+        }
+
         public EntityManager GetEntityManager(string entityClassRef)
         {
             return CurrentActivity.GetEntityManager(entityClassRef);

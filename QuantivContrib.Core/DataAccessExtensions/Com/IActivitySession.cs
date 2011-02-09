@@ -11,6 +11,7 @@ namespace QuantivContrib.Core.DataAccessExtensions.Com
         Entity Create(string entityClassRef);
         Entity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null);
         bool TryRetrieve(string entityClassRef, int id, out Entity entity, string retrievalPlanRef = null);
+        void Save(Entity entity);
         EntityManager GetEntityManager(string entityClassRef);
         void Commit();
     }
