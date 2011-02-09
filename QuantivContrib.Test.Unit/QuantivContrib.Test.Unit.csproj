@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\NUnit\2.5.4.10098\bin\net-2.0\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="QTVRUNTIMELib, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\QTVRUNTIMELib.dll</HintPath>
+    </Reference>
     <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Runtime.dll</HintPath>

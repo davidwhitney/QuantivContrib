@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Castle.DynamicProxy-2.2\bin\net-35\Castle.DynamicProxy2.dll</HintPath>
     </Reference>
+    <Reference Include="QTVRUNTIMELib, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\QTVRUNTIMELib.dll</HintPath>
+    </Reference>
     <Reference Include="Quantiv.Runtime, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Runtime.dll</HintPath>
@@ -55,9 +59,6 @@
     <Reference Include="Quantiv.Support, Version=5.0.7.0, Culture=neutral, PublicKeyToken=5563df1e7cf4b671, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Quantiv\5.0.7.4\Quantiv.Support.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Data.Linq">
-      <HintPath>..\ExternalLibs\ReLinq\1.13.92\net-3.5\bin\release\Remotion.Data.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -76,6 +77,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiExtensions\ComEntityExtensions.cs" />
     <Compile Include="DataAccessExtensions\ActivitySession.cs" />
     <Compile Include="DataAccessExtensions\ConnectedEntity.cs" />
     <Compile Include="DataAccessExtensions\EntityActivitySession.cs" />

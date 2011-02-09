@@ -1,11 +1,11 @@
 ﻿using System;
-using Entity = Quantiv.Runtime.Entity;
+using Quantiv.Runtime.COM;
 
 namespace QuantivContrib.Core.ApiExtensions
 {
-    public static class EntityExtensions
+    public static class ComEntityExtensions
     {
-        public static TAttributeValueType Get<TAttributeValueType>(this Entity entity, string attributeRef)
+        public static TAttributeValueType Get<TAttributeValueType>(this IEntity entity, string attributeRef)
         {
             if(entity == null)
             {
@@ -20,7 +20,7 @@ namespace QuantivContrib.Core.ApiExtensions
             return (TAttributeValueType)entity.GetAttributeValue(attributeRef);
         }
 
-        public static void Set<TAttributeValueType>(this Entity entity, string attributeRef, TAttributeValueType value)
+        public static void Set<TAttributeValueType>(this IEntity entity, string attributeRef, TAttributeValueType value)
         {
             if(entity == null)
             {

@@ -44,7 +44,7 @@ namespace QuantivContrib.Core.DataAccessExtensions
 
         public void Set<T>(string attributeRef, T value)
         {
-            _entity.SetValue(attributeRef, value);
+            _entity.Set(attributeRef, value);
         }
 
         public void Dispose()
