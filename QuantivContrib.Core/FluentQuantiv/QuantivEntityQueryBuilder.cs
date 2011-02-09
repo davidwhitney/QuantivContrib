@@ -15,16 +15,13 @@ namespace QuantivContrib.Core.FluentQuantiv
         private readonly EntityListRetriever _retriever;
         private readonly ActivityController _activityController;
         private readonly Activity _activity;
-
-        private Dictionary<int, SearchConditionList> _searchConditions;
-
+        
         public QuantivEntityQueryBuilder(string entityClassRef):this("BB01_Donation", "_EntityActivity", entityClassRef)
         {
         }
 
         public QuantivEntityQueryBuilder(string controllerPool, string activityRef, string entityClassRef)
         {
-
             _controllerPool = controllerPool;
             _activityRef = activityRef;
             _entityClassRef = entityClassRef;
@@ -34,18 +31,6 @@ namespace QuantivContrib.Core.FluentQuantiv
 
             var manager = _activity.GetEntityManager(_entityClassRef);
             _retriever = manager.CreateEntityListRetriever();
-        }
-        
-        public void OpenQueryPart()
-        {
-            if(_searchConditions.Count == 0)
-            {
-                _searchConditions[0] = _retriever.SearchConditionList;
-            }
-            else
-            {
-                _searchConditions[_searchConditions.Count] = _searchConditions[_searchConditions.Count - 1].CreateChildConditionList();
-            }
         }
 
         public void AddQueryPart(MemberExpression leftItem, ConstantExpression rightValue, ExpressionType nodeType)
