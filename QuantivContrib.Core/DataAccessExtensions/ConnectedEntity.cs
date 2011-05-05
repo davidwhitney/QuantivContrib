@@ -1,6 +1,5 @@
 using System;
-using Quantiv.Runtime;
-using QuantivContrib.Core.ApiExtensions;
+using QuantivContrib.Core.DataAccessExtensions.TypeEncapsulation;
 
 namespace QuantivContrib.Core.DataAccessExtensions
 {
@@ -8,7 +7,7 @@ namespace QuantivContrib.Core.DataAccessExtensions
     {
         private readonly IActivitySession _activitySession;
         private readonly string _entityClassRef;
-        private readonly Entity _entity;
+        private readonly IQuantivEntity _entity;
         private bool _disposed;
 
         public ConnectedEntity(IActivitySession activitySession, string entityClassRef, int id)
@@ -24,27 +23,19 @@ namespace QuantivContrib.Core.DataAccessExtensions
             Dispose(false);
         }
 
-        private Entity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null)
+        private IQuantivEntity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null)
         {
-            var manager = _activitySession.CurrentActivity.GetEntityManager(entityClassRef);
-            var retriever = manager.CreateEntityRetriever();
-
-            if (!string.IsNullOrEmpty(retrievalPlanRef))
-            {
-                retriever.RetrievalPlanRef = retrievalPlanRef;
-            }
-
-            return retriever.Retrieve(entityClassRef + "Id", id);
+            return _activitySession.Retrieve(entityClassRef, id, retrievalPlanRef);
         }
 
         public T Get<T>(string attributeRef)
         {
-            return _entity.Get<T>(attributeRef);
+            return (T)_entity.GetAttributeValue(attributeRef);
         }
 
         public void Set<T>(string attributeRef, T value)
         {
-            _entity.Set(attributeRef, value);
+            _entity.SetAttributeValue(attributeRef, value);
         }
 
         public void Dispose()

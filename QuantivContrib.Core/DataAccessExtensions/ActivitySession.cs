@@ -1,129 +1,19 @@
-using System;
-using Quantiv.Runtime;
+﻿using QuantivContrib.Core.DataAccessExtensions.TypeEncapsulation;
 
 namespace QuantivContrib.Core.DataAccessExtensions
 {
-    public class ActivitySession: IDisposable, IActivitySession
-    {
-        public bool ReadOnly { get; set; }
-        public bool AutoSave { get; set; }
+	public class ActivitySession : ActivitySessionBase
+	{
+		public ActivitySession(string controllerPool, string activityRef, bool autoSave)
+			: base(controllerPool, activityRef, autoSave)
+		{
+		}
 
-        public ActivityController CurrentActivityController { get; private set; }
-        public Activity CurrentActivity { get; private set; }
-
-        private readonly string _controllerPool;
-        private readonly string _activityRef;
-
-        private bool _disposed;
-        private bool _hasActiveActivity;
-
-        public ActivitySession(string controllerPool, string activityRef, bool autoSave = false)
-        {
-            AutoSave = autoSave;
-            
-            _controllerPool = controllerPool;
-            _activityRef = activityRef;
-
-            CreateActivity();
-        }
-        ~ActivitySession()
-        {
-            Dispose(false);
-        }
-
-        public Entity Create(string entityClassRef)
-        {
-            return GetEntityManager(entityClassRef).CreateEntity();
-        }
-
-        public Entity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null)
-        {
-            var manager = GetEntityManager(entityClassRef);
-            var retriever = manager.CreateEntityRetriever();
-
-            if (!string.IsNullOrEmpty(retrievalPlanRef))
-            {
-                retriever.RetrievalPlanRef = retrievalPlanRef;
-            }
-
-            return retriever.Retrieve(entityClassRef + "Id", id);
-        }
-
-        public void Save(Entity entity)
-        {
-            if (!_hasActiveActivity)
-            {
-                throw new InvalidOperationException("There must be an active activity to perform a save.");
-            }
-
-            entity.Save(CurrentActivity);
-        }
-
-        public EntityManager GetEntityManager(string entityClassRef)
-        {
-            return CurrentActivity.GetEntityManager(entityClassRef);
-        }
-
-        public void Commit()
-        {
-            Commit(true);
-        }
-
-        private void Commit(bool createNewActivity)
-        {
-            if (ReadOnly) { return; }
-
-            CurrentActivityController.Post();
-            EndCurrentActivity();
-
-            if (createNewActivity)
-            {
-                CreateActivity();
-            }
-        }
-
-        private void EndCurrentActivity()
-        {
-            try
-            {
-                CurrentActivityController.EndCurrentActivity();
-                ActivityControllerPooler.ReleaseController(CurrentActivityController);
-                _hasActiveActivity = false;
-            }
-            catch
-            {
-                // Not threadsafe. Apparently Quantiv Pooling is a badly implemented
-            }
-        }
-        
-        private void CreateActivity()
-        {
-            CurrentActivityController = ActivityControllerPooler.AllocateController(_controllerPool);
-            CurrentActivity = CurrentActivityController.StartActivity(_activityRef);
-            _hasActiveActivity = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (_disposed) { return; }
-
-            if (disposing && AutoSave)
-            {
-                Commit(false);
-            }
-
-            if (_hasActiveActivity)
-            {
-                EndCurrentActivity();
-            }
-
-            _disposed = true;
-        }
-    }
+		protected override void CreateActivity()
+		{
+			CurrentActivityController = ActivityControllerPoolerProxy.AllocateController(ControllerPool);
+			CurrentActivity = CurrentActivityController.StartActivity(ActivityRef);
+			HasActiveActivity = true;
+		}
+	}
 }

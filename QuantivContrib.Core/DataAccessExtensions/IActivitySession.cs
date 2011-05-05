@@ -1,4 +1,4 @@
-using Quantiv.Runtime;
+using QuantivContrib.Core.DataAccessExtensions.TypeEncapsulation;
 
 namespace QuantivContrib.Core.DataAccessExtensions
 {
@@ -6,12 +6,13 @@ namespace QuantivContrib.Core.DataAccessExtensions
     {
         bool ReadOnly { get; set; }
         bool AutoSave { get; set; }
-        ActivityController CurrentActivityController { get; }
-        Activity CurrentActivity { get; }
-        Entity Create(string entityClassRef);
-        Entity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null);
-        void Save(Entity entity);
-        EntityManager GetEntityManager(string entityClassRef);
+        IQuantivActivityController CurrentActivityController { get; }
+		IQuantivActivity CurrentActivity { get; }
+        IQuantivEntity Create(string entityClassRef);
+        IQuantivEntity Retrieve(string entityClassRef, int id, string retrievalPlanRef = null);
+		bool TryRetrieve(string entityClassRef, int id, out IQuantivEntity entity, string retrievalPlanRef = null);
+        void Save(IQuantivEntity entity);
+		IQuantivEntityManager GetEntityManager(string entityClassRef);
         void Commit();
     }
 }

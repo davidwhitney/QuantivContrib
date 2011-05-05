@@ -82,14 +82,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiExtensions\Com\ComEntityExtensions.cs" />
+    <Compile Include="DataAccessExtensions\ActivityScope.cs" />
     <Compile Include="DataAccessExtensions\ActivitySession.cs" />
-    <Compile Include="DataAccessExtensions\Com\ActivitySession.cs" />
-    <Compile Include="DataAccessExtensions\Com\EntityActivitySession.cs" />
-    <Compile Include="DataAccessExtensions\Com\IActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\ActivitySessionBase.cs" />
+    <Compile Include="DataAccessExtensions\ComWrappers\QuantivComActivityControllerWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ComWrappers\QuantivComActivityWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ComWrappers\QuantivComEntityManagerWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ComWrappers\QuantivComEntityRetrieverWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ComWrappers\QuantivComEntityWrapper.cs" />
+    <Compile Include="DataAccessExtensions\LegacyActivityScope.cs" />
+    <Compile Include="DataAccessExtensions\LegacyActivitySession.cs" />
+    <Compile Include="DataAccessExtensions\ModernWrappers\QuantivActivityControllerWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ModernWrappers\QuantivEntityManagerWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ModernWrappers\QuantivActivityWrapper.cs" />
+    <Compile Include="DataAccessExtensions\ModernWrappers\QuantivEntityRetrieverWrapper.cs" />
+    <Compile Include="DataAccessExtensions\TypeEncapsulation\ActivityControllerPoolerProxy.cs" />
+    <Compile Include="DataAccessExtensions\TypeEncapsulation\IQuantivActivityController.cs" />
+    <Compile Include="DataAccessExtensions\TypeEncapsulation\IQuantivActivity.cs" />
     <Compile Include="DataAccessExtensions\ConnectedEntity.cs" />
     <Compile Include="DataAccessExtensions\EntityActivitySession.cs" />
     <Compile Include="DataAccessExtensions\IActivitySession.cs" />
     <Compile Include="DataAccessExtensions\IConnectedEntity.cs" />
+    <Compile Include="DataAccessExtensions\TypeEncapsulation\IQuantivEntity.cs" />
+    <Compile Include="DataAccessExtensions\TypeEncapsulation\IQuantivEntityManager.cs" />
+    <Compile Include="DataAccessExtensions\TypeEncapsulation\IQuantivEntityRetriever.cs" />
+    <Compile Include="DataAccessExtensions\ModernWrappers\QuantivEntityWrapper.cs" />
+    <Compile Include="DynamicQuantiv\QuantivEntityHelper.cs" />
     <Compile Include="FluentQuantiv\QuantivEntityQueryBuilder.cs" />
     <Compile Include="FluentQuantiv\EntityQuery.cs" />
     <Compile Include="FluentQuantiv\QueryableAttributeValue.cs" />
